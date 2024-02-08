@@ -7,13 +7,13 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from './Login';
 import Home from './Home';
 const Stack = createNativeStackNavigator();
-import { RootSiblingParent } from 'react-native-root-siblings';
+import AddExpense from './AddExpense';
+import Footer from './Footer';
 
 export default function App() {
 
 
   return (
-    <RootSiblingParent>
 
       <NavigationContainer >
         <Stack.Navigator initialRouteName="Welcome"
@@ -27,13 +27,14 @@ export default function App() {
             },
           }}
         >
+          <Stack.Screen name="Footer" component={Footer} />
           <Stack.Screen name="Welcome" component={Welcome} />
           <Stack.Screen name="SignUp" component={SignUp} />
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="Home" component={Home} />
+          <Stack.Screen name="AddExpense" component={AddExpense} />
         </Stack.Navigator>
       </NavigationContainer>
-    </RootSiblingParent>
 
 
   )

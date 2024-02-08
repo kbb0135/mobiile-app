@@ -12,7 +12,7 @@ export default function SignUp({ navigation }) {
     const [password, onChangePassword] = useState("")
     const [spinner, setSpinner] = useState(false)
     const emailPattern = /^[\w.-]+@(gmail\.com|hotmail\.com|yahoo\.com|outlook\.com)$/i;
-
+    
     
 
     const handleClick = async () => {
