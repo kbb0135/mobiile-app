@@ -1,34 +1,76 @@
 import React, { useState } from 'react'
-import { ImageBackground, Text, View,StyleSheet, Image, TextInput } from 'react-native'
-
-export default function Login() {
-    const [firstName, onChangeFirstName] = useState("")
-    const [lastName, onChangeLastName] = useState("")
+import { ImageBackground, Text, View, StyleSheet, Image, ActivityIndicator, TextInput, Alert } from 'react-native'
+import { auth } from './firebase'
+import { signInWithEmailAndPassword } from "firebase/auth";
+import Toast from 'react-native-root-toast';
+import { handleToast } from './ToastHandler';
+export default function Login({ navigation }) {
     const [email, onChangeEmail] = useState("")
     const [password, onChangePassword] = useState("")
-    const [cPassword, onChangeCPassword] = useState("")
+    const [spinner, setSpinner] = useState(false)
+    const handleLogin = async () => {
+        const emailPattern = /^[\w.-]+@(gmail\.com|hotmail\.com|yahoo\.com|outlook\.com)$/i;
+
+        if (!emailPattern.test(email)) {
+            Alert.alert("Please ebter valid email")
+        }
+        else if (password.length < 6) {
+            Alert.alert("Please enter valid password")
+        }
+        else {
+            try {
+                setSpinner(true)
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user
+                if (user) {
+                    handleToast("Logged in successfully");
+                    setSpinner(false)
+                    navigation.navigate("Home")  
+                    
+
+                }
+            }
+            catch (error) {
+               handleToast(error.message)
+            }
+
+        }
+    }
+
     return (
 
-        <ImageBackground  style={styles.welcomeImage} source={require('./Images/LogoDesign.jpg')}>
+        <ImageBackground style={styles.welcomeImage} source={require('./Images/LogoDesign.jpg')}>
             <Image style={styles.ImageLogo} source={require("./Images/ExpenseLogo.png")} ></Image>
             <View style={styles.signUpContainer}>
-               
+
                 <Text style={styles.signUpText}>Email</Text>
                 <TextInput
                     style={styles.input}
-                    onChangeText={onChangeFirstName}
-                    value={firstName}
+                    onChangeText={onChangeEmail}
+                    value={email}
                 />
                 <Text style={styles.signUpText}>Password</Text>
                 <TextInput
                     style={styles.input}
-                    onChangeText={onChangeFirstName}
-                    value={firstName}
+                    onChangeText={onChangePassword}
+                    value={password}
+                    secureTextEntry={true}
                 />
                 <View style={styles.signUpButton}>
-                <View style={styles.signUpButtons}><Text style={styles.signUpInfo}>Login</Text></View>
+                    <View style={styles.signUpButtons}><Text style={styles.signUpInfo} onPress={async () => handleLogin()}>Login
+                        {
+                            spinner ? (
+                                <>
+                                    <ActivityIndicator size="small" color="#0000ff" />
+                                </>
+                            ) : (
+                                <>
+                                </>
+                            )
+                        }
+                    </Text></View>
                 </View>
-                 
+
             </View>
 
         </ImageBackground>
@@ -74,21 +116,21 @@ const styles = StyleSheet.create({
         borderColor: "white"
     },
     signUpContainer: {
-        top:110
+        top: 110
     },
     signUpText: {
-        color:"white"
+        color: "white"
     },
     signUpInfo: {
-        fontSize:20,
-        
+        fontSize: 20,
+
         alignItems: "center",
         textAlign: "center",
-        marginTop:6,
-        color:"black"
-      },
-      signUpButton: {
+        marginTop: 6,
+        color: "black"
+    },
+    signUpButton: {
         justifyContent: "center",
         alignItems: "center",
-      }
+    }
 })
