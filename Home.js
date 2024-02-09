@@ -20,15 +20,17 @@ export default function Home() {
         <View style={styles.content}>
           <Text style={styles.heading}>Helps Managing your Expenses In Appealing Way!!!</Text>
           <Text style={styles.paragraph}>
-            Our expense management application is equipped with
-            an array of powerful visualization tools aimed at providing insightful analyses of your
-            financial data. Seamlessly tracking your expenses, our app offers an intuitive user interface presenting
-            your spending patterns through dynamic pie charts, insightful bar graphs, and more. Easily categorize your
-            expenditures and visualize the distribution of your finances with interactive pie charts, allowing you to comprehend
-            where your money is being allocated. Gain deeper insights into your spending habits using our bar graphs,
-            presenting a detailed comparison of expenses over time or across different categories. With these visualization features,
-            our app empowers you to make informed financial decisions and effectively manage your budget, offering clarity and comprehension
-            in your financial journey.
+          Our expense management app provides a range of powerful 
+          visualization tools for insightful analyses of your financial data.
+           Track your expenses seamlessly with an intuitive user 
+           interface that presents your spending patterns through 
+           dynamic pie charts and insightful bar graphs. Easily categorize 
+           expenditures and visualize the distribution of your finances 
+           with interactive pie charts, allowing you to understand where 
+           your money is being allocated. Gain deeper insights into your 
+           spending habits using our bar graphs, providing detailed 
+           comparisons of expenses over time or across different 
+           categories.
           </Text>
           <View style={styles.flexContainer}>
             <View style={styles.leftContent}>

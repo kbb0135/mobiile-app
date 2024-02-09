@@ -66,7 +66,7 @@ export default function HeaderBar({ }) {
         <View style={styles.optionsContainer}>
           {options.map(item => (
             <TouchableOpacity key={item.id} style={styles.optionItem}>
-              <Feather name={item.icon} size={20} color="black" />
+              <Feather name={item.icon} size={20} color="white" />
               <Text style={styles.optionTitle}>{item.title}</Text>
             </TouchableOpacity>
           ))}
@@ -80,9 +80,10 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#000000',
+    backgroundColor: 'green',
     paddingHorizontal: 10,
     paddingVertical: 5,
+    opacity:1
   },
   username: {
     color: 'white',
@@ -101,19 +102,23 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 50, // Adjust the top position as needed
     right: 10,
-    backgroundColor: 'white',
+    backgroundColor: 'black',
     borderRadius: 5,
     elevation: 5,
+    opacity:1
   },
   optionItem: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 10,
     paddingHorizontal: 20,
+    color:"white"
   },
   optionTitle: {
     fontSize: 16,
     marginLeft: 10,
+    color:"white",
+    backgroundColor:"black"
   },
   headerText: {
     color: "white",
