@@ -3,8 +3,12 @@ import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { auth, db } from './firebase'
 import { Feather, navicon } from 'react-native-vector-icons';
 import { doc, getDoc } from "firebase/firestore";
+import { signOut } from "firebase/auth";
+import { handleToast } from './ToastHandler';
+import { useNavigation } from '@react-navigation/native';
 
 export default function HeaderBar({ }) {
+  const navigation = useNavigation();
   const [currentUser, setCurrentUser] = useState("")
   const [showOptions, setShowOptions] = useState(false);
   const [firstName, setFirstName] = useState("")
@@ -35,6 +39,7 @@ export default function HeaderBar({ }) {
       if (user) {
         // User is signed in.
         setCurrentUser(user);
+        
 
 
 
@@ -55,6 +60,14 @@ export default function HeaderBar({ }) {
         getUserName();
     }
 }, [currentUser]);
+
+const handleLogout = async() => {
+  signOut(auth).then(()=> {
+    handleToast("User is successfully signed out");
+    navigation.navigate("Welcome")
+
+  })
+}
   return (
     <View style={styles.container}>
       <Text style={styles.username}>EXPENSE APP</Text>
@@ -65,7 +78,15 @@ export default function HeaderBar({ }) {
       {showOptions && (
         <View style={styles.optionsContainer}>
           {options.map(item => (
-            <TouchableOpacity key={item.id} style={styles.optionItem}>
+            <TouchableOpacity 
+            key={item.id} 
+            style={styles.optionItem}
+            onPress={()=> {
+              if(item.id === '3') {
+                handleLogout()
+              }
+            }}
+            >
               <Feather name={item.icon} size={20} color="white" />
               <Text style={styles.optionTitle}>{item.title}</Text>
             </TouchableOpacity>
@@ -112,7 +133,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 10,
     paddingHorizontal: 20,
-    color:"white"
+    color:"white",
+    zIndex:1
   },
   optionTitle: {
     fontSize: 16,

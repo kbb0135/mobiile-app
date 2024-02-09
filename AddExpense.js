@@ -103,7 +103,7 @@ export default function AddExpense() {
   }
   return (
     <ImageBackground style={styles.welcomeImage} source={require('./Images/LogoDesign.jpg')}>
-      <HeaderBar />
+      
       <View style={styles.signUpContainer}>
         <Text style={styles.signUpText}>Expense Name</Text>
         <TextInput
