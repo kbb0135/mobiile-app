@@ -35,7 +35,7 @@ const Footer = () => {
             {showOptions && (
                 <View style={styles.optionsContainer}>
                     <Text style={styles.optionTitle} onPress={() => navigation.navigate("AddExpense")}>Add Expense</Text>
-                    <Text style={styles.optionTitle}>Add Saving</Text>
+                    <Text style={styles.optionTitle} onPress={() => navigation.navigate("AddSaving")}>Add Saving</Text>
                 </View>
             )}
             <View style={styles.iconContainer}>
