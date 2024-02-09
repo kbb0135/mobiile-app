@@ -1,49 +1,98 @@
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Alert, Image, ImageBackground, StyleSheet, ActivityIndicator, Text, TextInput, View } from 'react-native'
 import { auth, db } from "./firebase";
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import Footer from './Footer'
 import HeaderBar from './HeaderBar'
 import { Picker } from '@react-native-picker/picker';
 import { TouchableOpacity } from 'react-native';
+import { handleToast } from './ToastHandler';
 
 export default function AddExpense() {
-  const [firstName, onChangeFirstName] = useState("")
-  const [lastName, onChangeLastName] = useState("")
-  const [email, onChangeEmail] = useState("")
-  const [password, onChangePassword] = useState("")
+  const [expenseName, onChangeExpenseName] = useState("")
+  const [price, onChangePrice] = useState("")
   const [spinner, setSpinner] = useState(false)
-  const emailPattern = /^[\w.-]+@(gmail\.com|hotmail\.com|yahoo\.com|outlook\.com)$/i;
   const [category, setCategory] = useState('Select Category');
   const [savedCategory, setSavedCategory] = useState('');
-  const [pickerVisible, setPickerVisible] = useState(false); // State to manage Picker visibility
-
+  const [pickerVisible, setPickerVisible] = useState(false);
+  const [currentUser, setCurrentUser] = useState("")
   const handleCategoryChange = (itemValue) => {
     setCategory(itemValue);
     setPickerVisible(false); // Close the Picker after selecting an item
   };
+
+  useEffect(() => {
+    // Firebase Auth listener
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        // User is signed in.
+        setCurrentUser(user);
+
+
+
+
+      } else {
+        // User is signed out.
+        setCurrentUser(null);
+      }
+
+    }, []);
+
+    // Cleanup function
+    return () => unsubscribe();
+  }, []);
 
   const handleSaveCategory = () => {
     setSavedCategory(category);
   };
 
   const handleClick = async () => {
+    const getCurrentTimeAsNumber = () => {
+      const currentTime = new Date();
+
+      const hours = currentTime.getHours().toString().padStart(2, '0');
+      const minutes = currentTime.getMinutes().toString().padStart(2, '0');
+      const seconds = currentTime.getSeconds().toString().padStart(2, '0');
+      const date = currentTime.getDate().toString().padStart(2, '0');
+      const month = (currentTime.getMonth() + 1).toString().padStart(2,'0')
+      const year = currentTime.getFullYear().toString()
+
+      const formattedTime = `${year}${month}${date}${hours}${minutes}${seconds}`;
+      return formattedTime;
+    };
     try {
-      if (firstName === "") {
-        Alert.alert("Please enter valid name")
+      if (expenseName === "") {
+        Alert.alert("Please enter valid Expense name")
       }
-      else if (lastName === "") {
-        Alert.alert("Please enter valid last name.")
+      else if (category === "") {
+        Alert.alert("Please select valid category")
       }
-      else if (!emailPattern.test(email)) {
-        Alert.alert("Please ebter valid email")
+      else if (price === "") {
+        Alert.alert("Please enter valid price")
       }
-      else if (password.length < 6) {
-        Alert.alert("Please enter valid password")
-      }
+
       else {
-        setSpinner(true)
+        try {
+          setSpinner(true)
+          await setDoc(doc(db, currentUser.uid, getCurrentTimeAsNumber()), {
+            expenseName: expenseName,
+            category: category,
+            price: Number(price),
+            date: serverTimestamp(),
+          })
+            setSpinner(false)
+            await handleToast("Expense added successfully");
+            onChangeExpenseName("")
+            onChangePrice("")
+            setCategory('Select Category')
+          
+        }
+        catch(error) {
+          handleToast("Error adding expense. Please try again.");
+          setSpinner(false);
+        }
+
 
       }
     }
@@ -59,8 +108,8 @@ export default function AddExpense() {
         <Text style={styles.signUpText}>Expense Name</Text>
         <TextInput
           style={styles.input}
-          onChangeText={onChangeFirstName}
-          value={firstName}
+          onChangeText={onChangeExpenseName}
+          value={expenseName}
         />
 
         <View style={styles.categoryContainer}>
@@ -101,8 +150,8 @@ export default function AddExpense() {
         <Text style={styles.signUpText}>Price</Text>
         <TextInput
           style={styles.input}
-          onChangeText={onChangeEmail}
-          value={email}
+          onChangeText={onChangePrice}
+          value={price}
         />
 
 
@@ -141,7 +190,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#72B8EC"
   },
   signUpButtons: {
-    width: "30%",
+    width: "50%",
     height: 40,
     backgroundColor: "#CD8C28",
     borderRadius: 20
