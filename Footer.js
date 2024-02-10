@@ -45,7 +45,7 @@ const Footer = () => {
             </View>
             {editOptions && (
                 <View style={styles.editContainer}>
-                    <Text style={styles.optionTitle}>Show Expense</Text>
+                    <Text style={styles.optionTitle}  onPress={() => navigation.navigate("ShowExpense")}>Show Expense</Text>
                     <Text style={styles.optionTitle}>Show Saving</Text>
                 </View>
             )}

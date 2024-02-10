@@ -10,6 +10,7 @@ const Stack = createNativeStackNavigator();
 import AddExpense from './AddExpense';
 import Footer from './Footer';
 import AddSaving from './AddSaving';
+import ShowExpense from './ShowExpense';
 
 export default function App() {
 
@@ -35,6 +36,7 @@ export default function App() {
           <Stack.Screen name="Home" component={Home} />
           <Stack.Screen name="AddExpense" component={AddExpense} />
           <Stack.Screen name="AddSaving" component={AddSaving} />
+          <Stack.Screen name="ShowExpense" component={ShowExpense} />
         </Stack.Navigator>
       </NavigationContainer>
 
