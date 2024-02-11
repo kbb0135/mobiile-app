@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, StyleSheet } from 'react-native';
 import { auth, db } from './firebase';
 import { getDocs, collection } from 'firebase/firestore';
 import TableContainer from './TableContainer';
+import HeaderBar from './HeaderBar';
+import Footer from './Footer';
+import { useNavigation } from '@react-navigation/native';
 
 export default function ShowExpense() {
+    const navigation = useNavigation();
     const [currentUser, setCurrentUser] = useState(null);
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -31,26 +35,44 @@ export default function ShowExpense() {
         }
     }, [currentUser]);
 
+
     const getData = async () => {
         const querySnapshot = await getDocs(collection(db, currentUser.uid));
         const dataArray = [];
         querySnapshot.forEach((doc) => {
-            console.log(`${doc.id} => ${doc.data()}`);
-            const docDataArray = Object.keys(doc.data()).map(key => doc.data()[key]);
-            dataArray.push(docDataArray);
+            // Transforming the date to exclude time
+            const transformedData = {
+                ...doc.data(),
+                date: new Date(doc.data().date.seconds * 1000).toLocaleDateString()
+            };
+            dataArray.push(transformedData);
         });
         setData(dataArray);
         setLoading(false); // Set loading to false after data is fetched
     };
-    
 
     return (
         <View>
+            <HeaderBar />
             {loading ? (
                 <Text>Loading...</Text>
             ) : (
-                <TableContainer data={data} />
+                <>
+                {data? (
+                    <><TableContainer data={data} /></>
+                ):(
+                    <>
+                    <Text>No data to display</Text>
+                   
+                    </>
+                )}
+                    
+                </>
             )}
+            <View >
+                <Footer />
+            </View>
+
         </View>
     );
 }

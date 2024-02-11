@@ -6,19 +6,20 @@ const TableContainer = ({ data }) => {
     <View style={styles.container}>
       {/* Table Header */}
       <View style={styles.row}>
-        <Text style={[styles.cell, styles.header]}>Header 1</Text>
-        <Text style={[styles.cell, styles.header]}>Header 2</Text>
-        {/* Add more header cells as needed */}
+      <Text style={[styles.cell, styles.header]}>Expense Name</Text>
+        <Text style={[styles.cell, styles.header]}>Category</Text>  
+        <Text style={[styles.cell, styles.header]}>Date</Text>  
+        <Text style={[styles.cell, styles.header]}>Price</Text>
+       
       </View>
 
       {/* Table Rows */}
-      {data.map((row, rowIndex) => (
-        <View key={rowIndex} style={styles.row}>
-          {row.map((cellData, cellIndex) => (
-            <Text key={cellIndex} style={styles.cell}>
-              {cellData}
-            </Text>
-          ))}
+      {data.map((item, index) => (
+        <View key={index} style={styles.row}>
+          <Text style={styles.cell}>{item.expenseName}</Text>
+          <Text style={styles.cell}>{item.category}</Text>
+          <Text style={styles.cell}>{item.date}</Text>    
+          <Text style={styles.cell}>${item.price}</Text>
         </View>
       ))}
     </View>

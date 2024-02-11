@@ -65,7 +65,7 @@ export default function AddExpense() {
       if (expenseName === "") {
         Alert.alert("Please enter valid Expense name")
       }
-      else if (category === "") {
+      else if (category === "Select Category") {
         Alert.alert("Please select valid category")
       }
       else if (price === "") {
