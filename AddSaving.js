@@ -60,7 +60,6 @@ export default function AddSaving() {
       else if (price === "") {
         Alert.alert("Please enter valid price")
       }
-
       else {
         try {
           setSpinner(true)
@@ -78,6 +77,7 @@ export default function AddSaving() {
             
           
         }
+        
         catch(error) {
           handleToast("Error adding saving. Please try again.");
           setSpinner(false);
